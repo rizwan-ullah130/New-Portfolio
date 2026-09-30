@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rizwan Ullah | Data Analyst Portfolio</title>
+    <meta name="description" content="Rizwan Ullah is a Data Analyst specializing in Python, SQL, Excel, Power BI, Tableau, R, data visualization, and business intelligence.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FAF8F5',
+                            100: '#F5F0E6',
+                            200: '#E6DEC9',
+                            300: '#D8CBB0',
+                            400: '#BBAA88',
+                            900: '#2A241B',
+                        },
+                        accent: {
+                            blue: '#0284C7',
+                            cyan: '#0891B2',
+                            dark: '#0F172A',
+                            emerald: '#059669'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF8F5;
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-card-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(2, 132, 199, 0.12);
+            border-color: rgba(2, 132, 199, 0.3);
+        }
+
+        .custom-cursor {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            transition: transform 0.15s ease-out, opacity 0.2s ease-in-out;
+        }
+
+        .cursor-ring {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(2, 132, 199, 0.5);
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #0284C7;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-cursor.active .cursor-ring {
+            transform: scale(1.8);
+            border-color: #0284C7;
+            background-color: rgba(2, 132, 199, 0.08);
+        }
+
+        /* Loading Screen */
+        #loader {
+            background: #FAF8F5;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="selection:bg-sky-100 selection:text-sky-900">
+
+    <!-- Custom Cursor -->
+    <div id="cursor" class="custom-cursor hidden md:block">
+        <div class="cursor-ring"></div>
+        <div class="cursor-dot"></div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center">
+        <div class="relative flex items-center justify-center">
+            <div class="w-16 h-16 border-4 border-sky-200 border-t-sky-600 rounded-full animate-spin"></div>
+            <span class="absolute font-mono text-xs font-bold text-sky-700">DA</span>
+        </div>
+        <p id="loader-text" class="mt-4 font-mono text-xs tracking-widest text-slate-500 uppercase">Initializing Data Lab...</p>
+    </div>
+
+    <!-- Background 3D Canvas -->
+    <div id="canvas-container" class="fixed inset-0 pointer-events-none z-0 opacity-60"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-12 glass-card border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#home" class="text-lg font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-sky-600"></span>
+                <span>RIZWAN ULLAH</span>
+                <span class="text-xs font-mono px-2 py-0.5 bg-sky-100 text-sky-800 rounded-full font-medium">Data Analyst</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#about" class="hover:text-sky-600 transition-colors">About</a>
+                <a href="#projects" class="hover:text-sky-600 transition-colors">Projects</a>
+                <a href="#skills" class="hover:text-sky-600 transition-colors">Skills</a>
+                <a href="#education" class="hover:text-sky-600 transition-colors">Education</a>
+                <a href="#credentials" class="hover:text-sky-600 transition-colors">Credentials & Documents</a>
+                <a href="#contact" class="hover:text-sky-600 transition-colors">Contact</a>
+            </div>
+
+            <a href="assets/Resume1.pdf" target="_blank" download class="hidden md:inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-slate-900 hover:bg-sky-600 rounded-lg transition-all shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Download CV
+            </a>
+
+            <!-- Mobile Hamburger -->
+            <button id="mobile-menu-btn" class="md:hidden text-slate-800 focus:outline-none" aria-label="Toggle Navigation">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-md hidden md:hidden flex flex-col justify-center items-center gap-6 text-lg font-semibold text-slate-800">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-slate-700" aria-label="Close Navigation">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <div class="bg-white/90 p-8 rounded-2xl flex flex-col items-center gap-6 w-4/5 max-w-sm shadow-xl">
+            <a href="#about" class="mobile-link hover:text-sky-600">About</a>
+            <a href="#projects" class="mobile-link hover:text-sky-600">Projects</a>
+            <a href="#skills" class="mobile-link hover:text-sky-600">Skills</a>
+            <a href="#education" class="mobile-link hover:text-sky-600">Education</a>
+            <a href="#credentials" class="mobile-link hover:text-sky-600">Credentials</a>
+            <a href="#contact" class="mobile-link hover:text-sky-600">Contact</a>
+            <a href="assets/Resume1.pdf" target="_blank" download class="mt-2 w-full text-center px-4 py-3 text-sm font-semibold uppercase text-white bg-slate-900 rounded-lg">Download CV</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-24">
+
+        <!-- Hero Section -->
+        <section id="home" class="min-h-[90vh] flex items-center justify-center px-6 md:px-12 py-12">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-sky-50 border border-sky-200 rounded-full text-xs font-mono text-sky-800 font-medium">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Available for Data Analyst Roles
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-none">
+                        Turning Raw Data Into <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-cyan-600">Meaningful Insights.</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+                        Data Analytics graduate based in <strong>KPK, Pakistan</strong>, focused on transforming complex datasets into actionable business decisions through Python, SQL, Excel, Power BI, Tableau, R, and modern analytics tools.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-4">
+                        <a href="#projects" class="px-6 py-3 bg-slate-900 hover:bg-sky-600 text-white font-semibold rounded-xl text-sm transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+                            View My Work
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                        <a href="assets/Resume1.pdf" target="_blank" download class="px-6 py-3 glass-card hover:bg-slate-100 text-slate-800 font-semibold rounded-xl text-sm transition-all border border-slate-300">
+                            Download CV
+                        </a>
+                        <a href="#contact" class="px-6 py-3 text-slate-600 hover:text-sky-600 font-medium text-sm transition-colors">
+                            Let's Connect →
+                        </a>
+                    </div>
+
+                    <!-- Stack Badges -->
+                    <div class="pt-8 border-t border-slate-200/80">
+                        <p class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3">Core Stack & Analytics Tools</p>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono font-medium text-slate-700">
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded-md shadow-2xs">Python</span>
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded-md shadow-2xs">SQL / MySQL</span>
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded-md shadow-2xs">Tableau</span>
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded-md shadow-2xs">Power BI</span>
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded-md shadow-2xs">Excel</span>
+                            <span class="px-3 py-1 bg-white border border-slate-200 rounded-md shadow-2xs">R / Shiny</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Profile Visual -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-sky-300/40 to-cyan-300/40 rounded-3xl blur-2xl -rotate-6"></div>
+                        <div class="relative w-full h-full glass-card rounded-3xl p-3 border-2 border-white/80 shadow-xl overflow-hidden">
+                            <img src="assets/Profile.jpg" alt="Rizwan Ullah" class="w-full h-full object-cover rounded-2xl filter contrast-[1.03]">
+                            <div class="absolute bottom-4 left-4 right-4 p-3 glass-card bg-white/85 rounded-xl border border-slate-200 text-xs">
+                                <p class="font-bold text-slate-900">Rizwan Ullah</p>
+                                <p class="text-slate-500 font-mono text-[11px]">BS Data Analytics • GCUF (2026)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- About & Workflow Section -->
+        <section id="about" class="py-20 px-6 md:px-12 bg-cream-100/60 border-y border-slate-200/80">
+            <div class="max-w-7xl mx-auto space-y-16">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-5">
+                        <span class="text-xs font-mono font-bold uppercase tracking-widest text-sky-700">01. Background</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2">Analytical Rigor & Data Intelligence</h2>
+                    </div>
+                    <div class="lg:col-span-7 text-slate-600 leading-relaxed text-base space-y-4">
+                        <p>
+                            I am a Data Analytics graduate from <strong>Government College University Faisalabad (GCUF)</strong>, residing in <strong>KPK, Pakistan</strong>. My passion lies in taking raw, unstructured, or disparate data sources and transforming them into clear visual analytics, intuitive dashboards, and structured business conclusions.
+                        </p>
+                        <p>
+                            Whether performing Exploratory Data Analysis in Python, constructing multi-table relational queries in SQL, or crafting automated BI dashboards in Tableau and Power BI, my priority is always transparency, accuracy, and clear communication.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Workflow Pipeline Visual -->
+                <div class="space-y-6">
+                    <div class="text-center max-w-xl mx-auto">
+                        <p class="text-xs font-mono uppercase tracking-widest text-sky-700">Methodology</p>
+                        <h3 class="text-2xl font-bold text-slate-900">Data Analytics Workflow</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+                        <!-- Step 1 -->
+                        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-sky-500 transition-all group">
+                            <span class="font-mono text-xs font-bold text-sky-600 block mb-2">STAGE 01</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">RAW DATA</h4>
+                            <p class="text-xs text-slate-500">Ingestion, Extraction & Structured Sources</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-sky-500 transition-all group">
+                            <span class="font-mono text-xs font-bold text-sky-600 block mb-2">STAGE 02</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">CLEANING</h4>
+                            <p class="text-xs text-slate-500">Wrangling, Missing Values & Validation</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-sky-500 transition-all group">
+                            <span class="font-mono text-xs font-bold text-sky-600 block mb-2">STAGE 03</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">EDA</h4>
+                            <p class="text-xs text-slate-500">Exploratory Analysis & Statistical Modeling</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-sky-500 transition-all group">
+                            <span class="font-mono text-xs font-bold text-sky-600 block mb-2">STAGE 04</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">VISUALIZE</h4>
+                            <p class="text-xs text-slate-500">Dashboards, Plotly & Interactive Charts</p>
+                        </div>
+                        <!-- Step 5 -->
+                        <div class="glass-card p-5 rounded-2xl border border-slate-200 hover:border-sky-500 transition-all group">
+                            <span class="font-mono text-xs font-bold text-sky-600 block mb-2">STAGE 05</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">INSIGHTS</h4>
+                            <p class="text-xs text-slate-500">Pattern Identification & Business Metrics</p>
+                        </div>
+                        <!-- Step 6 -->
+                        <div class="glass-card p-5 rounded-2xl border-2 border-sky-500 bg-sky-50/50 transition-all group">
+                            <span class="font-mono text-xs font-bold text-sky-700 block mb-2">STAGE 06</span>
+                            <h4 class="font-bold text-slate-900 text-sm mb-1">DECISION</h4>
+                            <p class="text-xs text-slate-600 font-medium">Strategic Actionable Execution</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Projects Showcase Section -->
+        <section id="projects" class="py-20 px-6 md:px-12">
+            <div class="max-w-7xl mx-auto space-y-12">
+                
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <span class="text-xs font-mono font-bold uppercase tracking-widest text-sky-700">02. Portfolio</span>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Featured Analytics Projects</h2>
+                    </div>
+                    <p class="text-sm text-slate-500 max-w-md">
+                        Real-world data projects demonstrating end-to-end exploratory analysis, BI dashboards, risk modeling, and interactive web tools.
+                    </p>
+                </div>
+
+                <!-- Featured Project (Hero Style) -->
+                <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-200/90 hover:border-sky-300 transition-all shadow-lg">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-sky-100 text-sky-800 text-xs font-mono font-semibold rounded-md">
+                                ★ FEATURED PROJECT • PYTHON EDA
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-slate-900">Retail Sales Analysis & Visualization</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Comprehensive exploratory data analysis uncovering customer purchasing habits, seasonal sales trends, revenue contribution by category, and regional performance distributions using Python data stack.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 text-xs font-mono text-slate-600 pt-2">
+                                <span class="px-2.5 py-1 bg-slate-100 rounded">Python</span>
+                                <span class="px-2.5 py-1 bg-slate-100 rounded">Pandas</span>
+                                <span class="px-2.5 py-1 bg-slate-100 rounded">NumPy</span>
+                                <span class="px-2.5 py-1 bg-slate-100 rounded">Matplotlib</span>
+                                <span class="px-2.5 py-1 bg-slate-100 rounded">Seaborn</span>
+                                <span class="px-2.5 py-1 bg-slate-100 rounded">Plotly</span>
+                            </div>
+
+                            <div class="pt-4 flex items-center gap-4">
+                                <button onclick="openProjectModal('retail')" class="px-5 py-2.5 bg-slate-900 hover:bg-sky-600 text-white font-medium rounded-xl text-xs transition-colors">
+                                    View Project Details
+                                </button>
+                                <a href="https://github.com/rizwan-ullah130/Data-Visualization-in-python" target="_blank" class="px-5 py-2.5 glass-card hover:bg-slate-100 text-slate-700 font-medium rounded-xl text-xs transition-colors border border-slate-300">
+                                    GitHub Repository ↗
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-5">
+                            <div class="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group">
+                                <img src="assets/Customer Shopping Sales Dashboard.png" alt="Retail Sales Analysis" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid Projects -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Customer Shopping Sales Dashboard -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200/90 glass-card-hover flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="overflow-hidden rounded-xl h-52 border border-slate-200">
+                                <img src="assets/Customer Shopping Sales Dashboard.png" alt="Customer Shopping Dashboard" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-xs font-mono text-sky-700 font-semibold block">TABLEAU DASHBOARD</span>
+                            <h4 class="text-xl font-bold text-slate-900">Customer Shopping Sales Dashboard</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                An interactive Tableau visualization examining purchasing behavior, sales performance by mall/category, age distribution, and payment mode analytics.
+                            </p>
+                        </div>
+                        <div class="pt-6 flex items-center justify-between border-t border-slate-200/80 mt-4">
+                            <button onclick="openProjectModal('customer')" class="text-xs font-bold text-slate-900 hover:text-sky-600">View Dashboard Details →</button>
+                            <a href="https://github.com/rizwan-ullah130" target="_blank" class="text-xs font-mono text-slate-500 hover:text-sky-600">GitHub ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- HR Analytics Dashboard -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200/90 glass-card-hover flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="overflow-hidden rounded-xl h-52 border border-slate-200">
+                                <img src="assets/HR Analytics dashboard.png" alt="HR Analytics Dashboard" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-xs font-mono text-sky-700 font-semibold block">TABLEAU / BI</span>
+                            <h4 class="text-xl font-bold text-slate-900">HR Analytics Dashboard</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Workforce analytics dashboard analyzing employee attrition rates, demographic factors, job satisfaction tiers, department turnover, and tenure metrics.
+                            </p>
+                        </div>
+                        <div class="pt-6 flex items-center justify-between border-t border-slate-200/80 mt-4">
+                            <button onclick="openProjectModal('hr')" class="text-xs font-bold text-slate-900 hover:text-sky-600">View Dashboard Details →</button>
+                            <a href="https://github.com/rizwan-ullah130" target="_blank" class="text-xs font-mono text-slate-500 hover:text-sky-600">GitHub ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- Loan Risk Analysis (Qabail PDF Asset) -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200/90 glass-card-hover flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="overflow-hidden rounded-xl h-52 border border-slate-200 relative bg-slate-100 flex items-center justify-center">
+                                <canvas id="pdf-preview-canvas" class="w-full h-full object-cover"></canvas>
+                                <span class="absolute top-2 right-2 px-2 py-1 bg-slate-900/80 text-white text-[10px] font-mono rounded">PDF Document Preview</span>
+                            </div>
+                            <span class="text-xs font-mono text-sky-700 font-semibold block">PYTHON RISK ANALYTICS</span>
+                            <h4 class="text-xl font-bold text-slate-900">Loan Risk Analysis</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Exploratory evaluation of borrower risk patterns, credit default correlates, and financial risk profiles using Python statistical analytics.
+                            </p>
+                        </div>
+                        <div class="pt-6 flex items-center justify-between border-t border-slate-200/80 mt-4">
+                            <button onclick="openProjectModal('loan')" class="text-xs font-bold text-slate-900 hover:text-sky-600">View Project Details →</button>
+                            <a href="assets/Qabail Educational Council Portal.pdf" target="_blank" class="text-xs font-mono text-slate-500 hover:text-sky-600">View Asset ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- DataMate AI (Final Year Project) -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200/90 glass-card-hover flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="overflow-hidden rounded-xl h-52 border border-slate-200 bg-sky-50 flex items-center justify-center p-6">
+                                <img src="assets/Final Year Project DataMate AI.svg" alt="DataMate AI" class="max-h-full max-w-full">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono text-sky-700 font-semibold">FINAL YEAR PROJECT • TEAM</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 bg-slate-200 text-slate-700 rounded">Streamlit / Python</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900">DataMate AI</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                An AI-assisted data analysis and machine learning workspace enabling dynamic dataset profiling, automated preprocessing, interactive visualization, and model building. (Team Project with Shahbaz Junaid).
+                            </p>
+                        </div>
+                        <div class="pt-6 flex items-center justify-between border-t border-slate-200/80 mt-4">
+                            <a href="https://datamate-ai-analyst-ml-and-da.streamlit.app/" target="_blank" class="text-xs font-bold text-sky-700 hover:text-sky-900">Launch Live App ↗</a>
+                            <a href="https://github.com/rizwan-ullah130" target="_blank" class="text-xs font-mono text-slate-500 hover:text-sky-600">GitHub ↗</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section id="skills" class="py-20 px-6 md:px-12 bg-cream-100/60 border-y border-slate-200/80">
+            <div class="max-w-7xl mx-auto space-y-12">
+                
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs font-mono font-bold uppercase tracking-widest text-sky-700">03. Stack</span>
+                    <h2 class="text-3xl font-bold text-slate-900">Technical Competencies</h2>
+                    <p class="text-sm text-slate-500">Core data processing tools, database languages, and visualization frameworks.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Skill Card 1 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm">PY</div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">Python Development</h3>
+                                <p class="text-[11px] font-mono text-slate-400">Data Processing & Modeling</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2">
+                            <li class="flex items-center justify-between"><span>Pandas & NumPy</span> <span class="text-slate-400 font-mono">Data Wrangling</span></li>
+                            <li class="flex items-center justify-between"><span>Matplotlib & Seaborn</span> <span class="text-slate-400 font-mono">Static Charts</span></li>
+                            <li class="flex items-center justify-between"><span>Plotly & Streamlit</span> <span class="text-slate-400 font-mono">Interactive Apps</span></li>
+                            <li class="flex items-center justify-between"><span>Scikit-learn</span> <span class="text-slate-400 font-mono">ML Basics</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 2 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold text-sm">SQL</div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">Databases & SQL</h3>
+                                <p class="text-[11px] font-mono text-slate-400">Querying & Relational Data</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2">
+                            <li class="flex items-center justify-between"><span>MySQL</span> <span class="text-slate-400 font-mono">Relational DB</span></li>
+                            <li class="flex items-center justify-between"><span>Complex Joins & Aggregates</span> <span class="text-slate-400 font-mono">Transformations</span></li>
+                            <li class="flex items-center justify-between"><span>Subqueries & Views</span> <span class="text-slate-400 font-mono">Data Structuring</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 3 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">BI</div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">Business Intelligence</h3>
+                                <p class="text-[11px] font-mono text-slate-400">Dashboarding & Reporting</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2">
+                            <li class="flex items-center justify-between"><span>Tableau Desktop</span> <span class="text-slate-400 font-mono">Interactive Dashboards</span></li>
+                            <li class="flex items-center justify-between"><span>Microsoft Power BI</span> <span class="text-slate-400 font-mono">DAX & Modeling</span></li>
+                            <li class="flex items-center justify-between"><span>Microsoft Excel</span> <span class="text-slate-400 font-mono">Pivot Tables & Formulas</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 4 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">R</div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">R Ecosystem</h3>
+                                <p class="text-[11px] font-mono text-slate-400">Statistical Analysis</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2">
+                            <li class="flex items-center justify-between"><span>R Shiny</span> <span class="text-slate-400 font-mono">Web Modules</span></li>
+                            <li class="flex items-center justify-between"><span>Shiny Dashboards</span> <span class="text-slate-400 font-mono">UI Design</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 5 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">ST</div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">Statistics & Analytics</h3>
+                                <p class="text-[11px] font-mono text-slate-400">Research & Testing</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2">
+                            <li class="flex items-center justify-between"><span>SPSS</span> <span class="text-slate-400 font-mono">Statistical Testing</span></li>
+                            <li class="flex items-center justify-between"><span>Hypothesis Testing</span> <span class="text-slate-400 font-mono">Inferential Stats</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Skill Card 6 -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-sm">GIS</div>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm">Spatial Analytics</h3>
+                                <p class="text-[11px] font-mono text-slate-400">Geographic Data</p>
+                            </div>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-2">
+                            <li class="flex items-center justify-between"><span>ArcGIS</span> <span class="text-slate-400 font-mono">Spatial Mapping</span></li>
+                            <li class="flex items-center justify-between"><span>Geographic Visualization</span> <span class="text-slate-400 font-mono">Regional Patterns</span></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Education Timeline Section -->
+        <section id="education" class="py-20 px-6 md:px-12">
+            <div class="max-w-4xl mx-auto space-y-12">
+                
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-mono font-bold uppercase tracking-widest text-sky-700">04. Education</span>
+                    <h2 class="text-3xl font-bold text-slate-900">Academic Pathway</h2>
+                </div>
+
+                <div class="relative border-l-2 border-slate-200 pl-6 ml-4 md:ml-8 space-y-10">
+                    
+                    <!-- Ed 1 -->
+                    <div class="relative group">
+                        <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-sky-600 border-4 border-white shadow-sm"></div>
+                        <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-mono text-sky-700 font-semibold">2022 – 2026</span>
+                            <h3 class="text-lg font-bold text-slate-900 mt-1">BS Data Analytics</h3>
+                            <p class="text-sm font-medium text-slate-700">Government College University Faisalabad (GCUF)</p>
+                            <p class="text-xs text-slate-500 mt-2">Focused on core statistical modeling, database systems, Python analytics, visualization frameworks, and data mining principles.</p>
+                        </div>
+                    </div>
+
+                    <!-- Ed 2 -->
+                    <div class="relative group">
+                        <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-slate-300 border-4 border-white"></div>
+                        <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-mono text-slate-500">2022</span>
+                            <h3 class="text-lg font-bold text-slate-900 mt-1">Intermediate (Science General)</h3>
+                            <p class="text-sm font-medium text-slate-700">BISE Malakand</p>
+                            <p class="text-xs font-mono text-slate-500 mt-1">Marks: 799 / 1100</p>
+                        </div>
+                    </div>
+
+                    <!-- Ed 3 -->
+                    <div class="relative group">
+                        <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-slate-300 border-4 border-white"></div>
+                        <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-mono text-slate-500">2021</span>
+                            <h3 class="text-lg font-bold text-slate-900 mt-1">DIT Diploma (Diploma in Information Technology)</h3>
+                            <p class="text-sm font-medium text-slate-700">Government College of Management Sciences, Khar, Bajaur</p>
+                        </div>
+                    </div>
+
+                    <!-- Ed 4 -->
+                    <div class="relative group">
+                        <div class="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-slate-300 border-4 border-white"></div>
+                        <div class="glass-card p-6 rounded-2xl border border-slate-200">
+                            <span class="text-xs font-mono text-slate-500">2019</span>
+                            <h3 class="text-lg font-bold text-slate-900 mt-1">Matriculation (Science)</h3>
+                            <p class="text-sm font-medium text-slate-700">BISE Malakand</p>
+                            <p class="text-xs font-mono text-slate-500 mt-1">Marks: 680 / 1100</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Verified Certificates, Diplomas & Transcripts Section -->
+        <section id="credentials" class="py-20 px-6 md:px-12 bg-cream-100/60 border-y border-slate-200/80">
+            <div class="max-w-7xl mx-auto space-y-12">
+                
+                <div class="text-center max-w-xl mx-auto space-y-2">
+                    <span class="text-xs font-mono font-bold uppercase tracking-widest text-sky-700">05. Academic & Professional Credentials</span>
+                    <h2 class="text-3xl font-bold text-slate-900">Certificates, Diplomas & Transcripts</h2>
+                    <p class="text-xs text-slate-500">All verified educational documents and certification assets.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Item 1: DigiSkills Certificate -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                            </div>
+                            <div>
+                                <span class="text-xs font-mono text-sky-700 font-semibold uppercase">CERTIFICATION</span>
+                                <h3 class="text-lg font-bold text-slate-900 mt-1">Data Analytics & Business Intelligence</h3>
+                                <p class="text-xs text-slate-500 font-mono mt-1">DigiSkills.pk • Credential DMVHKMYMK</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-200 mt-4 flex items-center justify-between">
+                            <button onclick="openDocModal('assets/Certificate1 Data Analytics and Business Intelligence Digiskill.pdf', 'DigiSkills Certificate')" class="text-xs font-bold text-slate-900 hover:text-sky-600">View Certificate →</button>
+                            <a href="assets/Certificate1 Data Analytics and Business Intelligence Digiskill.pdf" download class="text-xs font-mono text-slate-500 hover:text-sky-600">PDF ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: DIT Diploma -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+                            </div>
+                            <div>
+                                <span class="text-xs font-mono text-cyan-700 font-semibold uppercase">DIPLOMA</span>
+                                <h3 class="text-lg font-bold text-slate-900 mt-1">DIT Diploma</h3>
+                                <p class="text-xs text-slate-500 font-mono mt-1">GCMS Khar Bajaur • 2021</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-200 mt-4 flex items-center justify-between">
+                            <button onclick="openImageModal('assets/diploma DIT GCMS KHAR Bajaur.jpeg', 'DIT Diploma GCMS Khar Bajaur')" class="text-xs font-bold text-slate-900 hover:text-sky-600">View Diploma Image →</button>
+                            <a href="assets/diploma DIT GCMS KHAR Bajaur.jpeg" target="_blank" class="text-xs font-mono text-slate-500 hover:text-sky-600">JPEG ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Official Transcript -->
+                    <div class="glass-card rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
+                            <div>
+                                <span class="text-xs font-mono text-indigo-700 font-semibold uppercase">ACADEMIC TRANSCRIPT</span>
+                                <h3 class="text-lg font-bold text-slate-900 mt-1">Official Academic Transcript</h3>
+                                <p class="text-xs text-slate-500 font-mono mt-1">BS Data Analytics • GCUF</p>
+                            </div>
+                        </div>
+                        <div class="pt-6 border-t border-slate-200 mt-4 flex items-center justify-between">
+                            <button onclick="openDocModal('assets/Transcript_Rizwan_Ullah_Official.pdf', 'Official Academic Transcript GCUF')" class="text-xs font-bold text-slate-900 hover:text-sky-600">View Transcript →</button>
+                            <a href="assets/Transcript_Rizwan_Ullah_Official.pdf" download class="text-xs font-mono text-slate-500 hover:text-sky-600">PDF ↗</a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-6 md:px-12">
+            <div class="max-w-5xl mx-auto text-center space-y-8">
+                
+                <div class="space-y-3 max-w-2xl mx-auto">
+                    <span class="text-xs font-mono font-bold uppercase tracking-widest text-sky-700">06. Connect</span>
+                    <h2 class="text-4xl font-extrabold text-slate-900">Let's Turn Data Into Insight.</h2>
+                    <p class="text-slate-600 text-sm">
+                        Open to Data Analyst opportunities, analytical projects, and technical collaboration.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto pt-4">
+                    <a href="mailto:rizwan.202202811@gcuf.edu.pk" class="glass-card p-6 rounded-2xl border border-slate-200 glass-card-hover block text-center">
+                        <div class="w-10 h-10 mx-auto rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <p class="text-xs font-mono text-slate-400 mb-1">EMAIL</p>
+                        <p class="text-xs font-bold text-slate-800 truncate">rizwan.202202811@gcuf.edu.pk</p>
+                    </a>
+
+                    <a href="tel:+923250349009" class="glass-card p-6 rounded-2xl border border-slate-200 glass-card-hover block text-center">
+                        <div class="w-10 h-10 mx-auto rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                        </div>
+                        <p class="text-xs font-mono text-slate-400 mb-1">PHONE</p>
+                        <p class="text-xs font-bold text-slate-800">+92 325 0349009</p>
+                    </a>
+
+                    <div class="glass-card p-6 rounded-2xl border border-slate-200 block text-center">
+                        <div class="w-10 h-10 mx-auto rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <p class="text-xs font-mono text-slate-400 mb-1">LOCATION</p>
+                        <p class="text-xs font-bold text-slate-800">KPK, Pakistan</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center items-center gap-6 pt-6">
+                    <a href="https://github.com/rizwan-ullah130" target="_blank" class="px-6 py-3 bg-slate-900 hover:bg-sky-600 text-white font-medium text-xs rounded-xl transition-colors">
+                        GitHub Profile ↗
+                    </a>
+                    <a href="https://www.linkedin.com/in/rizwan-ullah-2640b1363" target="_blank" class="px-6 py-3 bg-[#0A66C2] hover:bg-blue-700 text-white font-medium text-xs rounded-xl transition-colors">
+                        LinkedIn Profile ↗
+                    </a>
+                    <a href="assets/Resume1.pdf" target="_blank" download class="px-6 py-3 glass-card hover:bg-slate-100 text-slate-800 font-medium text-xs rounded-xl transition-colors border border-slate-300">
+                        Download CV
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-slate-200 text-center text-xs text-slate-500 bg-cream-100">
+        <p>© 2026 Rizwan Ullah • Data Analyst (KPK, Pakistan). Built for Data Intelligence.</p>
+    </footer>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 relative max-h-[90vh] overflow-y-auto border border-slate-300 shadow-2xl">
+            <button onclick="closeProjectModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Document Viewer Modal -->
+    <div id="doc-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-4xl w-full p-6 space-y-4 relative max-h-[90vh] flex flex-col border border-slate-300 shadow-2xl">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                <h3 id="doc-modal-title" class="font-bold text-slate-900 text-sm">Document Viewer</h3>
+                <button onclick="closeDocModal()" class="text-slate-400 hover:text-slate-800">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div id="doc-viewer-container" class="w-full h-[65vh] rounded-xl overflow-hidden border border-slate-200">
+                <iframe id="doc-iframe" src="" class="w-full h-full"></iframe>
+                <img id="doc-image" src="" class="w-full h-full object-contain hidden" alt="Diploma Image">
+            </div>
+            <div class="text-right">
+                <a id="doc-download-btn" href="#" download class="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-lg">Download File</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // PDF.js preview rendering
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        
+        const pdfPath = 'assets/Qabail Educational Council Portal.pdf';
+        const canvas = document.getElementById('pdf-preview-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            pdfjsLib.getDocument(pdfPath).promise.then(pdf => {
+                pdf.getPage(1).then(page => {
+                    const viewport = page.getViewport({ scale: 0.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    page.render({ pdfCanvasContext: ctx, viewport: viewport });
+                });
+            }).catch(err => {
+                console.log('PDF Preview fallback active');
+            });
+        }
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        if (cursor && window.innerWidth > 768) {
+            window.addEventListener('mousemove', (e) => {
+                cursor.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+            });
+            document.querySelectorAll('a, button, input, textarea').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+            });
+        }
+
+        // Loader Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 600);
+                }
+            }, 400);
+        });
+
+        // Three.js Data Intelligence Core
+        const container = document.getElementById('canvas-container');
+        if (container && typeof THREE !== 'undefined') {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const geometry = new THREE.IcosahedronGeometry(2, 2);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x0284C7,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.12
+            });
+            const dataCore = new THREE.Mesh(geometry, material);
+            scene.add(dataCore);
+
+            const particleCount = 200;
+            const particlesGeo = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 12;
+                positions[i + 1] = (Math.random() - 0.5) * 12;
+                positions[i + 2] = (Math.random() - 0.5) * 12;
+            }
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particlesMat = new THREE.PointsMaterial({
+                color: 0x0891B2,
+                size: 0.035,
+                transparent: true,
+                opacity: 0.4
+            });
+            const particleSystem = new THREE.Points(particlesGeo, particlesMat);
+            scene.add(particleSystem);
+
+            let mouseX = 0, mouseY = 0;
+            window.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+                mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                dataCore.rotation.y += 0.002;
+                dataCore.rotation.x += 0.001;
+                particleSystem.rotation.y -= 0.0008;
+
+                camera.position.x += (mouseX - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Project Modal System
+        const projectsData = {
+            retail: {
+                title: "Retail Sales Analysis & Visualization",
+                tech: "Python, Pandas, NumPy, Matplotlib, Seaborn, Plotly",
+                desc: "An end-to-end exploratory data analysis project examining consumer purchase patterns, order values across product lines, regional distribution, and sales trends.",
+                insights: "Identified key sales drivers, category revenue concentrations, and customer segment preferences through interactive distribution plots.",
+                github: "https://github.com/rizwan-ullah130/Data-Visualization-in-python"
+            },
+            customer: {
+                title: "Customer Shopping Sales Dashboard",
+                tech: "Tableau, Business Intelligence, Data Modeling",
+                desc: "A clean, executive-level Tableau dashboard tracking sales performance across retail centers, age demographic distributions, payment method preferences, and time series purchasing trends.",
+                insights: "Enabled quick multi-filter exploration for regional shopping malls and category performance.",
+                github: "https://github.com/rizwan-ullah130"
+            },
+            hr: {
+                title: "HR Analytics Dashboard",
+                tech: "Tableau, HR Metrics, Attrition Analysis",
+                desc: "Strategic workforce analytics dashboard examining attrition causes, tenure metrics, employee satisfaction levels, and demographic splits across departments.",
+                insights: "Mapped high-risk attrition corridors to help HR teams implement targeted employee retention initiatives.",
+                github: "https://github.com/rizwan-ullah130"
+            },
+            loan: {
+                title: "Loan Risk Analysis",
+                tech: "Python, Statistical Risk Analytics, Pandas",
+                desc: "Exploratory evaluation of loan application variables, customer credit default markers, and financial risk profiles.",
+                insights: "Highlighted primary financial indicators correlated with borrower loan default risk.",
+                github: "https://github.com/rizwan-ullah130"
+            }
+        };
+
+        function openProjectModal(key) {
+            const data = projectsData[key];
+            if (!data) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <span class="text-xs font-mono text-sky-700 font-bold uppercase">Project Details</span>
+                <h3 class="text-2xl font-bold text-slate-900 mt-1">${data.title}</h3>
+                <p class="text-xs font-mono text-slate-500 mt-1">${data.tech}</p>
+                
+                <div class="space-y-4 pt-4 border-t border-slate-200 text-xs text-slate-600">
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Overview & Objective</h4>
+                        <p class="leading-relaxed">${data.desc}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Key Analytical Insights</h4>
+                        <p class="leading-relaxed">${data.insights}</p>
+                    </div>
+                </div>
+
+                <div class="pt-6 flex items-center justify-end gap-3">
+                    <a href="${data.github}" target="_blank" class="px-5 py-2.5 bg-slate-900 text-white text-xs font-semibold rounded-xl">Visit GitHub Repository ↗</a>
+                </div>
+            `;
+
+            document.getElementById('project-modal').classList.remove('hidden');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+        }
+
+        // Document Viewer Modals (PDF & Image support)
+        function openDocModal(filePath, title) {
+            document.getElementById('doc-modal-title').textContent = title;
+            document.getElementById('doc-iframe').src = filePath;
+            document.getElementById('doc-iframe').classList.remove('hidden');
+            document.getElementById('doc-image').classList.add('hidden');
+            document.getElementById('doc-download-btn').href = filePath;
+            document.getElementById('doc-modal').classList.remove('hidden');
+        }
+
+        function openImageModal(imgPath, title) {
+            document.getElementById('doc-modal-title').textContent = title;
+            document.getElementById('doc-image').src = imgPath;
+            document.getElementById('doc-image').classList.remove('hidden');
+            document.getElementById('doc-iframe').classList.add('hidden');
+            document.getElementById('doc-download-btn').href = imgPath;
+            document.getElementById('doc-modal').classList.remove('hidden');
+        }
+
+        function closeDocModal() {
+            document.getElementById('doc-modal').classList.add('hidden');
+            document.getElementById('doc-iframe').src = '';
+        }
+
+        // Mobile Menu
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
+            closeMenuBtn.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+        }
+    </script>
+</body>
+</html>

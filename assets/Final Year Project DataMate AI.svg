@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 576" width="100%" height="100%" style="background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="primary-blue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e70bf"/>
+      <stop offset="100%" stop-color="#2a85de"/>
+    </linearGradient>
+    
+    <linearGradient id="btn-teal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2196f3"/>
+      <stop offset="100%" stop-color="#00bfa5"/>
+    </linearGradient>
+
+    <linearGradient id="robot-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d0d7de"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="card-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.04"/>
+    </filter>
+  </defs>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <rect x="0" y="0" width="230" height="576" fill="#0d1b2a"/>
+
+  <!-- Logo Header -->
+  <rect x="12" y="12" width="206" height="85" rx="10" fill="url(#primary-blue)"/>
+  <text x="115" y="62" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">DataMate AI</text>
+
+  <!-- Sidebar Nav Items -->
+  <!-- Dashboard -->
+  <rect x="12" y="110" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <rect x="28" y="123" width="5" height="12" fill="#4caf50"/>
+  <rect x="35" y="127" width="5" height="8" fill="#ff9800"/>
+  <text x="48" y="134" font-size="12" fill="#d0d7de" font-weight="500">Dashboard</text>
+
+  <!-- Data Upload -->
+  <rect x="12" y="156" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <path d="M 28 171 h 6 l 2 2 h 8 v 9 h -16 z" fill="#ffca28"/>
+  <text x="48" y="180" font-size="12" fill="#8b949e" font-weight="500">Data Upload</text>
+
+  <!-- Data Preprocessing -->
+  <rect x="12" y="202" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <path d="M 28 221 l 4 -4 l 3 3 l -4 4 z M 37 212 l 3 3 l -2 2 l -3 -3 z" fill="#8b949e"/>
+  <text x="48" y="226" font-size="12" fill="#8b949e" font-weight="500">Data Preprocessing</text>
+
+  <!-- Visualization -->
+  <rect x="12" y="248" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <rect x="28" y="260" width="12" height="12" rx="1" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+  <path d="M 30 266 l 3 3 l 5 -5" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+  <text x="48" y="272" font-size="12" fill="#8b949e" font-weight="500">Visualization</text>
+
+  <!-- ML Algorithm -->
+  <rect x="12" y="294" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <circle cx="34" cy="313" r="5" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+  <text x="48" y="318" font-size="12" fill="#8b949e" font-weight="500">ML Algorithm</text>
+
+  <!-- Export -->
+  <rect x="12" y="340" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <rect x="29" y="353" width="10" height="12" rx="1" fill="#8b949e"/>
+  <text x="48" y="364" font-size="12" fill="#8b949e" font-weight="500">Export</text>
+
+  <!-- History -->
+  <rect x="12" y="386" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <circle cx="34" cy="405" r="5" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+  <path d="M 34 402 v 3 h 2" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+  <text x="48" y="410" font-size="12" fill="#8b949e" font-weight="500">History</text>
+
+  <!-- About -->
+  <rect x="12" y="432" width="206" height="38" rx="6" fill="#1b2a3d"/>
+  <rect x="28" y="444" width="12" height="14" rx="2" fill="#1e70bf"/>
+  <text x="34" y="455" font-size="10" fill="#ffffff" font-weight="bold" text-anchor="middle">i</text>
+  <text x="48" y="456" font-size="12" fill="#ffffff" font-weight="500">About</text>
+
+  <!-- TOP RIGHT CONTROLS -->
+  <g fill="#57606a" font-size="12">
+    <text x="860" y="28">Share</text>
+    <!-- Star Icon -->
+    <path d="M 900 24 l 2 -6 l 2 6 l 6 0 l -5 4 l 2 6 l -5 -4 l -5 4 l 2 -6 l -5 -4 z" fill="none" stroke="#57606a" stroke-width="1.2"/>
+    <!-- Pencil Icon -->
+    <path d="M 922 18 l 4 4 l -8 8 h -4 v -4 z" fill="none" stroke="#57606a" stroke-width="1.2"/>
+    <!-- GitHub Icon / Branch -->
+    <circle cx="952" cy="20" r="6" fill="none" stroke="#57606a" stroke-width="1.2"/>
+    <!-- More Options -->
+    <circle cx="975" cy="18" r="1.5"/>
+    <circle cx="975" cy="23" r="1.5"/>
+    <circle cx="975" cy="28" r="1.5"/>
+  </g>
+
+  <!-- MAIN HERO SECTION -->
+  <text x="295" y="165" font-size="42" font-weight="800" fill="#0d1b2a">Welcome to</text>
+  <text x="295" y="220" font-size="44" font-weight="800" fill="#00bfa5">DataMate AI</text>
+  
+  <text x="295" y="265" font-size="16" fill="#57606a">Your smart partner for</text>
+  <text x="295" y="292" font-size="16" fill="#57606a">data insights &amp; intelligence</text>
+
+  <!-- CTA Button -->
+  <rect x="295" y="325" width="125" height="38" rx="19" fill="url(#btn-teal)"/>
+  <!-- Rocket Icon -->
+  <path d="M 322 348 l 4 -4 m -2 -2 l 5 -5 c 2 -2 5 -1 5 -1 s 1 3 -1 5 l -5 5" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="338" y="349" font-size="12" font-weight="600" fill="#ffffff">Get Started</text>
+
+  <!-- ROBOT ILLUSTRATION -->
+  <g transform="translate(710, 100)">
+    <!-- Shadow -->
+    <ellipse cx="100" cy="235" rx="60" ry="8" fill="#e2e8f0"/>
+    
+    <!-- Legs -->
+    <rect x="75" y="170" width="18" height="45" rx="8" fill="#d0d7de"/>
+    <rect x="107" y="170" width="18" height="45" rx="8" fill="#d0d7de"/>
+    <ellipse cx="80" cy="215" rx="14" ry="7" fill="#8b949e"/>
+    <ellipse cx="116" cy="215" rx="14" ry="7" fill="#8b949e"/>
+
+    <!-- Body -->
+    <rect x="65" y="105" width="70" height="70" rx="20" fill="url(#robot-body)" stroke="#d0d7de" stroke-width="2"/>
+    <rect x="80" y="120" width="40" height="35" rx="8" fill="#edf2f7"/>
+
+    <!-- Left Arm (pointing left) -->
+    <path d="M 65 125 Q 35 120 10 95" fill="none" stroke="#b0b8c1" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="8" cy="93" r="6" fill="#8b949e"/>
+
+    <!-- Right Arm -->
+    <path d="M 135 125 Q 155 140 160 160" fill="none" stroke="#b0b8c1" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="161" cy="163" r="6" fill="#8b949e"/>
+
+    <!-- Head -->
+    <rect x="45" y="15" width="110" height="85" rx="42" fill="url(#robot-body)" stroke="#d0d7de" stroke-width="2"/>
+    
+    <!-- Ears/Headphones -->
+    <rect x="35" y="40" width="12" height="35" rx="5" fill="#8b949e"/>
+    <rect x="153" y="40" width="12" height="35" rx="5" fill="#8b949e"/>
+
+    <!-- Visor/Face -->
+    <rect x="58" y="28" width="84" height="55" rx="25" fill="#0d1b2a"/>
+
+    <!-- Eyes -->
+    <circle cx="78" cy="55" r="14" fill="#2196f3"/>
+    <circle cx="78" cy="55" r="11" fill="#0d1b2a"/>
+    <circle cx="78" cy="55" r="5" fill="#00bfa5"/>
+    <circle cx="75" cy="52" r="2" fill="#ffffff"/>
+
+    <circle cx="122" cy="55" r="14" fill="#2196f3"/>
+    <circle cx="122" cy="55" r="11" fill="#0d1b2a"/>
+    <circle cx="122" cy="55" r="5" fill="#00bfa5"/>
+    <circle cx="119" cy="52" r="2" fill="#ffffff"/>
+  </g>
+
+  <!-- FEATURE CARDS -->
+  <!-- Card 1: Smart Analytics -->
+  <g transform="translate(295, 385)">
+    <rect x="0" y="0" width="150" height="145" rx="12" fill="#ffffff" filter="url(#card-shadow)"/>
+    <!-- Icon -->
+    <rect x="62" y="25" width="26" height="26" fill="none" stroke="#0d1b2a" stroke-width="1.5"/>
+    <rect x="66" y="37" width="5" height="11" fill="#4caf50"/>
+    <rect x="73" y="32" width="5" height="16" fill="#2196f3"/>
+    <rect x="80" y="41" width="5" height="7" fill="#ff9800"/>
+    <!-- Content -->
+    <text x="75" y="75" font-size="12" font-weight="700" fill="#0d1b2a" text-anchor="middle">Smart Analytics</text>
+    <text x="75" y="96" font-size="9" fill="#8b949e" text-anchor="middle">Auto-generated KPIs &amp; real-</text>
+    <text x="75" y="108" font-size="9" fill="#8b949e" text-anchor="middle">time insights from your data</text>
+  </g>
+
+  <!-- Card 2: Auto Cleaning -->
+  <g transform="translate(460, 385)">
+    <rect x="0" y="0" width="150" height="145" rx="12" fill="#ffffff" filter="url(#card-shadow)"/>
+    <!-- Icon (Broom/Brush) -->
+    <path d="M 83 24 l 6 6 l -12 12 l -4 1 l 1 -4 z" fill="#ffca28" stroke="#0d1b2a" stroke-width="1.5"/>
+    <path d="M 71 41 l 5 5" stroke="#0d1b2a" stroke-width="1.5"/>
+    <!-- Content -->
+    <text x="75" y="75" font-size="12" font-weight="700" fill="#0d1b2a" text-anchor="middle">Auto Cleaning</text>
+    <text x="75" y="96" font-size="9" fill="#8b949e" text-anchor="middle">Fix missing values,</text>
+    <text x="75" y="108" font-size="9" fill="#8b949e" text-anchor="middle">duplicates &amp; outliers</text>
+    <text x="75" y="120" font-size="9" fill="#8b949e" text-anchor="middle">instantly</text>
+  </g>
+
+  <!-- Card 3: Visualization -->
+  <g transform="translate(625, 385)">
+    <rect x="0" y="0" width="150" height="145" rx="12" fill="#ffffff" filter="url(#card-shadow)"/>
+    <!-- Icon -->
+    <rect x="62" y="25" width="26" height="26" fill="none" stroke="#0d1b2a" stroke-width="1.5"/>
+    <path d="M 64 47 L 72 38 L 78 42 L 86 28" fill="none" stroke="#e53935" stroke-width="1.5"/>
+    <!-- Content -->
+    <text x="75" y="75" font-size="12" font-weight="700" fill="#0d1b2a" text-anchor="middle">Visualization</text>
+    <text x="75" y="96" font-size="9" fill="#8b949e" text-anchor="middle">Create beautiful interactive</text>
+    <text x="75" y="108" font-size="9" fill="#8b949e" text-anchor="middle">charts in seconds</text>
+  </g>
+
+  <!-- Card 4: ML Models -->
+  <g transform="translate(790, 385)">
+    <rect x="0" y="0" width="150" height="145" rx="12" fill="#ffffff" filter="url(#card-shadow)"/>
+    <!-- Icon (Glasses/AI face) -->
+    <circle cx="70" cy="38" r="6" fill="none" stroke="#0d1b2a" stroke-width="1.5"/>
+    <circle cx="80" cy="38" r="6" fill="none" stroke="#0d1b2a" stroke-width="1.5"/>
+    <path d="M 72 46 Q 75 49 78 46" fill="none" stroke="#0d1b2a" stroke-width="1.5"/>
+    <!-- Content -->
+    <text x="75" y="75" font-size="12" font-weight="700" fill="#0d1b2a" text-anchor="middle">ML Models</text>
+    <text x="75" y="96" font-size="9" fill="#8b949e" text-anchor="middle">Train AI models with zero</text>
+    <text x="75" y="108" font-size="9" fill="#8b949e" text-anchor="middle">code, zero effort</text>
+  </g>
+</svg>
